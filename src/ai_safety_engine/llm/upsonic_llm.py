@@ -3,6 +3,7 @@ Upsonic LLM Provider for AI Safety Engine
 """
 
 from typing import List, Optional
+import asyncio
 from pydantic import BaseModel
 from upsonic import Agent, Task
 
@@ -85,6 +86,10 @@ class UpsonicLLMProvider:
                 
         except Exception as e:
             return []
+
+    async def find_keywords_async(self, content_type: str, text: str, language: str = "en") -> List[str]:
+        """Async wrapper for find_keywords using a thread to avoid blocking the event loop."""
+        return await asyncio.to_thread(self.find_keywords, content_type, text, language)
     
     def generate_block_message(self, reason: str, language: str = "en") -> str:
         """Generate contextual block message using Upsonic Agent"""
@@ -110,6 +115,10 @@ class UpsonicLLMProvider:
             
         except Exception as e:
             return f"Content blocked: {reason}"
+
+    async def generate_block_message_async(self, reason: str, language: str = "en") -> str:
+        """Async wrapper for generate_block_message using a thread."""
+        return await asyncio.to_thread(self.generate_block_message, reason, language)
     
     def anonymize_content(self, text: str, keywords: List[str], language: str = "en") -> str:
         """Anonymize content by replacing sensitive keywords using Upsonic Agent"""
@@ -142,6 +151,10 @@ class UpsonicLLMProvider:
             for keyword in keywords:
                 anonymized = anonymized.replace(keyword, "[REDACTED]")
             return anonymized
+
+    async def anonymize_content_async(self, text: str, keywords: List[str], language: str = "en") -> str:
+        """Async wrapper for anonymize_content using a thread."""
+        return await asyncio.to_thread(self.anonymize_content, text, keywords, language)
     
     def detect_language(self, text: str) -> str:
         """Detect the language of the given text using Upsonic Agent"""
@@ -165,6 +178,10 @@ class UpsonicLLMProvider:
                 
         except Exception as e:
             return "en"  # Default fallback
+
+    async def detect_language_async(self, text: str) -> str:
+        """Async wrapper for detect_language using a thread."""
+        return await asyncio.to_thread(self.detect_language, text)
     
     def translate_text(self, text: str, target_language: str) -> str:
         """Translate text to target language using Upsonic Agent"""
@@ -303,6 +320,10 @@ class UpsonicLLMProvider:
             
         except Exception as e:
             return text  # Fallback to original text
+
+    async def translate_text_async(self, text: str, target_language: str) -> str:
+        """Async wrapper for translate_text using a thread."""
+        return await asyncio.to_thread(self.translate_text, text, target_language)
 
 
 
