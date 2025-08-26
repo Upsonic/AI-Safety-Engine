@@ -32,8 +32,6 @@ class ActionBase(ABC):
                       base_llm=None,
                       text_finder_llm=None) -> PolicyOutput:
         """Wrapper method that saves rule_result and original_content, then calls the actual action"""
-
-        print("Who is the lang", self.language)
         self.rule_result = rule_result
         self.original_content = original_content.copy()  # Copy here once!
         self.transformation_map = {}  # Reset transformation map
@@ -71,7 +69,6 @@ class ActionBase(ABC):
             detected_lang = llm.detect_language(combined_text)
             return detected_lang
         except Exception as e:
-            print(f"Language detection error: {e}")
             return "en"  # Fallback to English
     
 

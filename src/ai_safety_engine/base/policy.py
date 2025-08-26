@@ -24,7 +24,6 @@ class Policy:
         self.rule = rule
         self.action = action
         self.language = language
-        print("Now the langas is ", self.language)
         
         # Create LLM instances with models if specified
         from ..llm.upsonic_llm import UpsonicLLMProvider
@@ -63,7 +62,6 @@ class Policy:
         """Execute the full policy: check rule and take action"""
         rule_result = self.check(policy_input)
 
-        print("I am the lang", self.language)
         action_result = self.action.execute_action(rule_result, policy_input.input_texts or [], self.language, 
                                         self.language_identify_llm, self.base_llm, self.text_finder_llm)
         return rule_result, action_result, action_result

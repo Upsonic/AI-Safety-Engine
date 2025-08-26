@@ -84,7 +84,6 @@ class UpsonicLLMProvider:
                 return []
                 
         except Exception as e:
-            print(f"Upsonic LLM error in find_keywords: {e}")
             return []
     
     def generate_block_message(self, reason: str, language: str = "en") -> str:
@@ -110,7 +109,6 @@ class UpsonicLLMProvider:
             return result.block_message
             
         except Exception as e:
-            print(f"Upsonic LLM error in generate_block_message: {e}")
             return f"Content blocked: {reason}"
     
     def anonymize_content(self, text: str, keywords: List[str], language: str = "en") -> str:
@@ -139,7 +137,6 @@ class UpsonicLLMProvider:
             return result.anonymized_content
             
         except Exception as e:
-            print(f"Upsonic LLM error in anonymize_content: {e}")
             # Fallback to simple replacement
             anonymized = text
             for keyword in keywords:
@@ -167,7 +164,6 @@ class UpsonicLLMProvider:
                 return "en"  # Default to English if confidence is low
                 
         except Exception as e:
-            print(f"Upsonic LLM error in detect_language: {e}")
             return "en"  # Default fallback
     
     def translate_text(self, text: str, target_language: str) -> str:
@@ -265,8 +261,6 @@ class UpsonicLLMProvider:
         
         target_lang_name = language_map.get(target_language, target_language)
         
-        print("Target Language Name: ", target_lang_name)
-        print("original_text:", text)
         task = Task(
             f"System: You are a professional translator. Your task is to translate the following text from English to {target_lang_name}.\n\n"
             f"Rules:\n"
@@ -279,18 +273,14 @@ class UpsonicLLMProvider:
             f"Important: Return ONLY the translation in {target_lang_name}. Do not include any explanations or the original text.",
             response_format=TranslationResponse
         )
-        print("task description:", task.description)
         
         try:
             result = self.agent.do(task)
-            print("translated text:", result.translated_text)
-            print("confidence score:", result.confidence)
             
             translated = result.translated_text.strip()
             
             # If translation is empty or exactly the same as input, try one more time
             if not translated or translated == text.strip():
-                print("Warning: Translation failed, retrying with stronger prompt...")
                 task.description += "\n\nWARNING: Previous attempt returned original text. Please ensure to translate to " + target_lang_name
                 result = self.agent.do(task)
                 translated = result.translated_text.strip()
@@ -309,11 +299,9 @@ class UpsonicLLMProvider:
                     if text.strip() == eng:
                         return tr
                 
-                print(f"Warning: Translation failed completely for: {text}")
                 return text
             
         except Exception as e:
-            print(f"Upsonic LLM error in translate_text: {e}")
             return text  # Fallback to original text
 
 

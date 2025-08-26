@@ -38,7 +38,6 @@ class RuleBase(ABC):
         try:
             detected_language = llm.detect_language(combined_text)
         except Exception as e:
-            print(f"Language detection error in rule: {e}")
             detected_language = self.language
             
         return llm.find_keywords(content_type, combined_text, language=detected_language)
