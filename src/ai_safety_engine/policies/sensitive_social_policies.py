@@ -219,22 +219,7 @@ class SensitiveSocialBlockAction_LLM(ActionBase):
         return self.llm_raise_block_error(reason)
 
 
-class SensitiveSocialReplaceAction(ActionBase):
-    """Action to replace sensitive social content with safe alternatives"""
-    
-    name = "Sensitive Social Replace Action"
-    description = "Replaces sensitive social content with appropriate alternatives"
-    language = "en"
-    
-    def action(self, rule_result: RuleOutput) -> PolicyOutput:
-        """Execute replacement action for sensitive social content"""
-        
-        if rule_result.confidence < 0.3:
-            return self.allow_content()
-        
-        # Replace with educational message
-        replacement = "[Content removed - contained discriminatory language]"
-        return self.replace_triggered_keywords(replacement)
+
 
 
 
@@ -306,14 +291,7 @@ SensitiveSocialBlockPolicy_LLM_Finder = Policy(
     action=SensitiveSocialBlockAction()
 )
 
-## Sensitive Social Replace Policy
-# Policy that replaces sensitive content with safe alternatives
-SensitiveSocialReplacePolicy = Policy(
-    name="Sensitive Social Replace Policy",
-    description="Replaces sensitive social content with appropriate alternatives",
-    rule=SensitiveSocialRule(),
-    action=SensitiveSocialReplaceAction()
-)
+
 
 
 

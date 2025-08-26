@@ -256,28 +256,7 @@ class AdultContentBlockAction_LLM(ActionBase):
         return self.llm_raise_block_error(reason)
 
 
-class AdultContentReplaceAction(ActionBase):
-    """Action to replace adult content with safe alternatives"""
-    
-    name = "Adult Content Replace Action"
-    description = "Replaces adult content with appropriate alternatives"
-    language = "en"
-    
-    def action(self, rule_result: RuleOutput) -> PolicyOutput:
-        """Execute replacement action for adult content"""
-        
-        if rule_result.confidence < 0.3:
-            return self.allow_content()
-        
-        # Different replacements based on content type
-        if rule_result.content_type == "EXPLICIT_ADULT_CONTENT":
-            replacement = "[Content removed - explicit material]"
-        elif rule_result.content_type == "AGE_RESTRICTED_CONTENT":
-            replacement = "[Content removed - age restricted]"
-        else:  # SUGGESTIVE_CONTENT
-            replacement = "[Content moderated]"
-        
-        return self.replace_triggered_keywords(replacement)
+
 
 
 
@@ -349,14 +328,7 @@ AdultContentBlockPolicy_LLM_Finder = Policy(
     action=AdultContentBlockAction()
 )
 
-## Adult Content Replace Policy
-# Policy that replaces adult content with safe alternatives
-AdultContentReplacePolicy = Policy(
-    name="Adult Content Replace Policy",
-    description="Replaces adult content with appropriate alternatives",
-    rule=AdultContentRule(),
-    action=AdultContentReplaceAction()
-)
+
 
 
 

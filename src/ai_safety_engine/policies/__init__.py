@@ -25,7 +25,6 @@ from .sensitive_social_policies import (
     SensitiveSocialBlockPolicy,
     SensitiveSocialBlockPolicy_LLM,
     SensitiveSocialBlockPolicy_LLM_Finder,
-    SensitiveSocialReplacePolicy,
     SensitiveSocialRaiseExceptionPolicy,
     SensitiveSocialRaiseExceptionPolicy_LLM
 )
@@ -35,7 +34,6 @@ from .adult_content_policies import (
     AdultContentBlockPolicy,
     AdultContentBlockPolicy_LLM,
     AdultContentBlockPolicy_LLM_Finder,
-    AdultContentReplacePolicy,
     AdultContentRaiseExceptionPolicy,
     AdultContentRaiseExceptionPolicy_LLM
 )
@@ -57,7 +55,6 @@ __all__ = [
     "SensitiveSocialBlockPolicy",
     "SensitiveSocialBlockPolicy_LLM",
     "SensitiveSocialBlockPolicy_LLM_Finder", 
-    "SensitiveSocialReplacePolicy",
     "SensitiveSocialRaiseExceptionPolicy",
     "SensitiveSocialRaiseExceptionPolicy_LLM",
     
@@ -65,7 +62,6 @@ __all__ = [
     "AdultContentBlockPolicy",
     "AdultContentBlockPolicy_LLM",
     "AdultContentBlockPolicy_LLM_Finder",
-    "AdultContentReplacePolicy", 
     "AdultContentRaiseExceptionPolicy",
     "AdultContentRaiseExceptionPolicy_LLM"
 ]
