@@ -13,6 +13,7 @@ class PolicyInput(BaseModel):
     input_videos: Optional[List[str]] = None
     input_audio: Optional[List[str]] = None
     input_files: Optional[List[str]] = None
+    extra_data: Optional[Dict[str, Any]] = None
 
 
 
