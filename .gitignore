@@ -3,6 +3,10 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+.DS_Store
+implementation_plan.md
+test.py
+
 # C extensions
 *.so
 
