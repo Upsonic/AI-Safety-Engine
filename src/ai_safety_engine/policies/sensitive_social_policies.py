@@ -237,20 +237,7 @@ class SensitiveSocialReplaceAction(ActionBase):
         return self.replace_triggered_keywords(replacement)
 
 
-class SensitiveSocialAnonymizeAction(ActionBase):
-    """Action to anonymize sensitive social content"""
-    
-    name = "Sensitive Social Anonymize Action"
-    description = "Anonymizes sensitive social content while preserving context"
-    language = "en"
-    
-    def action(self, rule_result: RuleOutput) -> PolicyOutput:
-        """Execute anonymization action for sensitive social content"""
-        
-        if rule_result.confidence < 0.3:
-            return self.allow_content()
-        
-        return self.anonymize_triggered_keywords()
+
 
 
 class SensitiveSocialRaiseExceptionAction(ActionBase):
@@ -328,14 +315,7 @@ SensitiveSocialReplacePolicy = Policy(
     action=SensitiveSocialReplaceAction()
 )
 
-## Sensitive Social Anonymize Policy
-# Policy that anonymizes sensitive content while preserving context
-SensitiveSocialAnonymizePolicy = Policy(
-    name="Sensitive Social Anonymize Policy",
-    description="Anonymizes sensitive social content while maintaining readability",
-    rule=SensitiveSocialRule(),
-    action=SensitiveSocialAnonymizeAction()
-)
+
 
 ## Sensitive Social Raise Exception Policy
 # Policy that raises exceptions for sensitive social content

@@ -280,20 +280,7 @@ class AdultContentReplaceAction(ActionBase):
         return self.replace_triggered_keywords(replacement)
 
 
-class AdultContentAnonymizeAction(ActionBase):
-    """Action to anonymize adult content"""
-    
-    name = "Adult Content Anonymize Action"
-    description = "Anonymizes adult content while preserving context"
-    language = "en"
-    
-    def action(self, rule_result: RuleOutput) -> PolicyOutput:
-        """Execute anonymization action for adult content"""
-        
-        if rule_result.confidence < 0.3:
-            return self.allow_content()
-        
-        return self.anonymize_triggered_keywords()
+
 
 
 class AdultContentRaiseExceptionAction(ActionBase):
@@ -371,14 +358,7 @@ AdultContentReplacePolicy = Policy(
     action=AdultContentReplaceAction()
 )
 
-## Adult Content Anonymize Policy
-# Policy that anonymizes adult content while preserving context
-AdultContentAnonymizePolicy = Policy(
-    name="Adult Content Anonymize Policy",
-    description="Anonymizes adult content while maintaining readability",
-    rule=AdultContentRule(),
-    action=AdultContentAnonymizeAction()
-)
+
 
 ## Adult Content Raise Exception Policy
 # Policy that raises exceptions for adult content
