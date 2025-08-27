@@ -1,4 +1,4 @@
-# AI Safety Engine
+# Upsoni - AI Safety Engine ™
 
 **Upsonic AI Safety Engine** is a comprehensive content filtering and policy enforcement framework designed to provide robust safety layers for AI applications. It enables organizations to implement customizable content moderation, data anonymization, and compliance policies with both rule-based and LLM-powered detection capabilities.
 
