@@ -3,6 +3,7 @@ Policy class that combines rules and actions
 """
 
 from typing import Optional, List
+import asyncio
 from .rule_base import RuleBase
 from .action_base import ActionBase
 from ..models import PolicyInput, RuleOutput, PolicyOutput, ActionOutput
@@ -56,6 +57,12 @@ class Policy:
         """Check the input against the policy rule"""
         return self.rule.process(policy_input)
     
+    async def check_async(self, policy_input: PolicyInput) -> RuleOutput:
+        """Async variant of check using rule's async processing."""
+        if hasattr(self.rule, "process_async"):
+            return await self.rule.process_async(policy_input)
+        return await asyncio.to_thread(self.rule.process, policy_input)
+    
 
     
     def execute(self, policy_input: PolicyInput) -> tuple[RuleOutput, ActionOutput, PolicyOutput]:
@@ -64,6 +71,22 @@ class Policy:
 
         action_result = self.action.execute_action(rule_result, policy_input.input_texts or [], self.language, 
                                         self.language_identify_llm, self.base_llm, self.text_finder_llm)
+        return rule_result, action_result, action_result
+
+    async def execute_async(self, policy_input: PolicyInput) -> tuple[RuleOutput, ActionOutput, PolicyOutput]:
+        """Async execution path without breaking the sync API."""
+        rule_result = await self.check_async(policy_input)
+        if hasattr(self.action, "execute_action_async"):
+            action_result = await self.action.execute_action_async(
+                rule_result, policy_input.input_texts or [], self.language,
+                self.language_identify_llm, self.base_llm, self.text_finder_llm
+            )
+        else:
+            action_result = await asyncio.to_thread(
+                self.action.execute_action,
+                rule_result, policy_input.input_texts or [], self.language,
+                self.language_identify_llm, self.base_llm, self.text_finder_llm
+            )
         return rule_result, action_result, action_result
     
     def __str__(self) -> str:

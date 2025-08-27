@@ -4,6 +4,7 @@ Base class for rules
 
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, List
+import asyncio
 
 from ai_safety_engine.llm.upsonic_llm import UpsonicLLMProvider
 from ..models import PolicyInput, RuleOutput
@@ -41,3 +42,20 @@ class RuleBase(ABC):
             detected_language = self.language
             
         return llm.find_keywords(content_type, combined_text, language=detected_language)
+
+    async def process_async(self, policy_input: PolicyInput) -> RuleOutput:
+        """Async wrapper for process using a thread by default.
+
+        Subclasses can override for true-async processing.
+        """
+        return await asyncio.to_thread(self.process, policy_input)
+
+    async def _llm_find_keywords_with_input_async(self, content_type: str, policy_input: PolicyInput) -> List[str]:
+        """Async variant that uses async LLM helpers when available."""
+        combined_text = " ".join(policy_input.input_texts or [])
+        llm = UpsonicLLMProvider(agent_name="Text Finder Agent", model=self.text_finder_llm)
+        try:
+            detected_language = await llm.detect_language_async(combined_text)
+        except Exception as e:
+            detected_language = self.language
+        return await llm.find_keywords_async(content_type, combined_text, language=detected_language)
